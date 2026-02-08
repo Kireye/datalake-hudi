@@ -15,18 +15,14 @@
 #  See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Use Ubuntu 22.04 (Jammy) - very stable for Hadoop/Big Data stacks
 FROM ubuntu:22.04
 
-# Replace MAINTAINER (deprecated) with LABEL
 LABEL maintainer="Hoodie"
 
 USER root
 
-# Default to UTF-8 file.encoding
 ENV LANG C.UTF-8
 
-# Prevent interactive prompts during apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG HADOOP_VERSION=3.3.4 
@@ -34,7 +30,6 @@ ARG HADOOP_URL=https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VER
 ENV HADOOP_VERSION ${HADOOP_VERSION}
 ENV HADOOP_URL ${HADOOP_URL}
 
-# Install Java 21 and other utilities
 RUN set -x \
     && apt-get update \
     && apt-get install -yq \
