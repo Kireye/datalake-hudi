@@ -43,4 +43,4 @@ check-tools:
     @command -v java >/dev/null 2>&1 || { echo >&2 "Java is required but not installed. Aborting."; exit 1; }
     @command -v mvn >/dev/null 2>&1 || { echo >&2 "Maven is required but not installed. Aborting."; exit 1; }
     @command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required but not installed. Aborting."; exit 1; }
-    echo "All tools (Java, Maven, Docker) are present."
+    @command echo "All tools (Java, Maven, Docker) are present."
