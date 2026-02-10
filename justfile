@@ -5,6 +5,8 @@ scala_version := "2.12"
 flink_version := "1.20"
 java_version  := "21"
 lombok_version := "1.18.36"
+hive_version := "4.2.0"
+hadoop_version := "3.4.2"
 
 default: help
 
@@ -23,6 +25,8 @@ build-jars:
         -Dscala-{{scala_version}} \
         -Dflink{{flink_version}} \
         -Djava.version={{java_version}} \
+        -Dhadoop.version={{hadoop_ver}} \
+        -Dhive.version={{hive_version}} \
         -Dmaven.compiler.annotationProcessorPaths=org.projectlombok:lombok:{{lombok_version}}
 
 build-images:
