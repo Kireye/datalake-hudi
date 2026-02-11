@@ -1,6 +1,6 @@
 set shell := ["bash", "-c"]
 
-spark_version := "3.5"
+spark_version := "3.5.3"
 scala_version := "2.12"
 flink_version := "1.20"
 java_version  := "21"
@@ -17,6 +17,12 @@ default: help
 
 help:
     @just --list
+
+sync-versions:
+    @echo "Syncing Dockerfiles..."
+    find docker/hoodie -name "Dockerfile" -exec sed -i 's/ARG HADOOP_VERSION=.*/ARG HADOOP_VERSION={{hadoop_version}}/' {} +
+    find docker/hoodie -name "Dockerfile" -exec sed -i 's/ARG HIVE_VERSION=.*/ARG HIVE_VERSION={{hive_version}}/' {} +
+    find docker/hoodie -name "Dockerfile" -exec sed -i 's/ARG SPARK_VERSION=.*/ARG SPARK_VERSION={{spark_version}}/' {} +
 
 clean:
     echo "Cleaning Maven and Docker target directories..."

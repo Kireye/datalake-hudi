@@ -15,8 +15,8 @@
 #  See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG HADOOP_VERSION=3.3.4
-ARG HIVE_VERSION=3.1.3
+ARG HADOOP_VERSION=3.3.6
+ARG HIVE_VERSION=4.2.0
 FROM apachehudi/hudi-hadoop_${HADOOP_VERSION}-hive_${HIVE_VERSION}
 
 ENV ENABLE_INIT_DAEMON true
@@ -35,10 +35,10 @@ COPY finish-step.sh /
 
 # Need to do this all in one step because running separate commands doubles the image size
 RUN echo "Installing Spark-version (${SPARK_VERSION})" \
-      &&  wget http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
-      && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
-      && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} /opt/spark \
-      && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      &&  wget http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz \
+      && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop3.tgz \
+      && mv spark-${SPARK_VERSION}-bin-hadoop3 /opt/spark \
+      && rm spark-${SPARK_VERSION}-bin-hadoop3.tgz \
       && cd /
 
 # Install build dependencies

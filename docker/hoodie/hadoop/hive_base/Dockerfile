@@ -35,7 +35,7 @@ RUN echo "Hive URL is :${HIVE_URL}" && wget ${HIVE_URL} -O hive.tar.gz && \
   rm $HIVE_HOME/lib/guava-*.jar && \
   cp $HADOOP_HOME/share/hadoop/common/lib/guava-*.jar $HIVE_HOME/lib/ && \
   ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar && \
-	wget https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
+	wget https://jdbc.postgresql.org/download/postgresql-42.7.8.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
 	rm hive.tar.gz && mkdir -p /var/hoodie/ws/docker/hoodie/hadoop/hive_base/target/
 
 #Spark should be compiled with Hive to be able to use it
