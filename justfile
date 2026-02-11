@@ -6,7 +6,12 @@ flink_version := "1.20"
 java_version  := "21"
 lombok_version := "1.18.36"
 hive_version := "4.2.0"
-hadoop_version := "3.4.2"
+hive_compile_version := "3.1.3"
+hadoop_version := "3.3.6"
+
+
+hive_docker_version := "4.2.0"
+hadoop_docker_version := "3.4.2"
 
 default: help
 
@@ -19,19 +24,19 @@ clean:
     rm -rf docker/target
 
 build-jars:
-    echo "Compiling Hudi JARs with Java {{java_version}}..."
-    mvn clean install -DskipTests \
-        -Dspark{{spark_version}} \
-        -Dscala-{{scala_version}} \
-        -Dflink{{flink_version}} \
+   mvn clean install -Dmaven.test.skip=true \
+        -Dspark3.5 -Dscala-2.12 -Dflink1.20 \
         -Djava.version={{java_version}} \
-        -Dhadoop.version={{hadoop_ver}} \
-        -Dhive.version={{hive_version}} \
-        -Dmaven.compiler.annotationProcessorPaths=org.projectlombok:lombok:{{lombok_version}}
+        -Dhadoop.version={{hadoop_version}} \
+        -Dhive.version={{hive_compile_version}} \
+        -Dmaven.compiler.annotationProcessorPaths=org.projectlombok:lombok:1.18.36
+
 
 build-images:
-    echo "Building Hudi Docker Images using BuildKit..."
+    @echo "Building Hudi Docker Images for Hadoop {{hadoop_version}}..."
     export DOCKER_BUILDKIT=1; \
+    export HADOOP_VERSION={{hadoop_version}}; \
+    export HIVE_VERSION={{hive_version}}; \
     cd docker && ./build_docker_images.sh
 
 build: build-jars build-images

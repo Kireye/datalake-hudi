@@ -36,9 +36,9 @@ export BUILDX_EXPERIMENTAL=1
 # Get the directory of this script for relative paths
 SCRIPT_DIR=$(cd $(dirname "$0") && pwd)
 # Versions for Hadoop, Spark, and Hive
-HADOOP_VERSION="3.3.4"
+HADOOP_VERSION=${HADOOP_VERSION:-3.4.2}
 SPARK_VERSION="3.5.3"
-HIVE_VERSION="3.1.3"
+HIVE_VERSION=${HIVE_VERSION:-4.2.0}
 # Docker image tags
 VERSION_TAG="1.1.0"
 LATEST_TAG="latest"

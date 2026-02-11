@@ -15,7 +15,7 @@
 #  See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG HADOOP_VERSION=3.4.2
+ARG HADOOP_VERSION=3.3.6
 FROM apachehudi/hudi-hadoop_${HADOOP_VERSION}-base:latest
 
 ENV HIVE_HOME /opt/hive
@@ -32,7 +32,9 @@ ENV HIVE_URL ${HIVE_URL}
 #Install Hive MySQL, PostgreSQL JDBC
 RUN echo "Hive URL is :${HIVE_URL}" && wget ${HIVE_URL} -O hive.tar.gz && \
 	tar -xzvf hive.tar.gz && mv *hive*-bin hive && \
-        ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar && \
+  rm $HIVE_HOME/lib/guava-*.jar && \
+  cp $HADOOP_HOME/share/hadoop/common/lib/guava-*.jar $HIVE_HOME/lib/ && \
+  ln -s /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar && \
 	wget https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
 	rm hive.tar.gz && mkdir -p /var/hoodie/ws/docker/hoodie/hadoop/hive_base/target/
 
