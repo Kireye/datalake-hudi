@@ -26,19 +26,9 @@ ENV TRINO_VERSION=368
 ENV TRINO_HOME=/usr/local/trino
 ENV BASE_URL=https://repo1.maven.org/maven2
 
-RUN apt-get update
-RUN apt-get install -y \
-    curl \
-    tar \
-    sudo \
-    rsync \
-    python \
-    wget \
-    python3-pip \
-    python-dev \
-    build-essential \
-    uuid-runtime \
-    less
+RUN apt-get update && apt-get install -y \
+    curl tar sudo rsync python wget python3-pip python-dev \
+    build-essential uuid-runtime less
 
 ENV JAVA_HOME /usr/java/default
 ENV PATH $PATH:$JAVA_HOME/bin
@@ -53,11 +43,13 @@ RUN wget -q ${BASE_URL}/io/trino/trino-server/${TRINO_VERSION}/trino-server-${TR
 RUN tar xvzf trino-server-${TRINO_VERSION}.tar.gz -C /usr/local/
 RUN ln -s /usr/local/trino-server-${TRINO_VERSION} $TRINO_HOME
 
+RUN wget https://repo1.maven.org/maven2/org/apache/hudi/hudi-spark3.5-bundle_2.12/0.15.0/hudi-spark3.5-bundle_2.12-0.15.0.jar \
+    -O ${TRINO_HOME}/plugin/hive/hudi-spark-bundle.jar
+
 ENV TRINO_BASE_WS /var/hoodie/ws/docker/hoodie/hadoop/trinobase
 RUN mkdir -p ${TRINO_BASE_WS}/target/
 ADD target/ ${TRINO_BASE_WS}/target/
-ENV HUDI_TRINO_BUNDLE ${TRINO_BASE_WS}/target/hudi-trino-bundle.jar
-RUN cp ${HUDI_TRINO_BUNDLE} ${TRINO_HOME}/plugin/hive/
+RUN [ -f ${TRINO_BASE_WS}/target/hudi-trino-bundle.jar ] && cp ${TRINO_BASE_WS}/target/hudi-trino-bundle.jar ${TRINO_HOME}/plugin/hive/ || echo "Using downloaded Hudi bundle"
 
 ADD scripts ${TRINO_HOME}/scripts
 RUN chmod +x ${TRINO_HOME}/scripts/trino.sh

@@ -33,7 +33,6 @@ COPY wait-for-step.sh /
 COPY execute-step.sh /
 COPY finish-step.sh /
 
-# Need to do this all in one step because running separate commands doubles the image size
 RUN echo "Installing Spark-version (${SPARK_VERSION})" \
       &&  wget http://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz \
       && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop3.tgz \
@@ -63,8 +62,6 @@ RUN apt-get update && apt-get install -y \
 #Give permission to execute scripts
 RUN chmod +x /wait-for-step.sh && chmod +x /execute-step.sh && chmod +x /finish-step.sh
 
-# Fix the value of PYTHONHASHSEED
-# Note: this is needed when you use Python 3.3 or greater
 ENV PYTHONHASHSEED 1
 
 ENV SPARK_HOME /opt/spark
@@ -78,8 +75,10 @@ ENV SPARK_BLOCKMGR_PORT 5003
 
 EXPOSE $SPARK_DRIVER_PORT $SPARK_UI_PORT $SPARK_BLOCKMGR_PORT
 
-# Without this spark-shell fails - Download if it is not already there in $SPARK_INSTALL
 RUN wget -nc -q -O "${SPARK_INSTALL}/jars/jersey-bundle-1.19.4.jar" "https://repo1.maven.org/maven2/com/sun/jersey/jersey-bundle/1.19.4/jersey-bundle-1.19.4.jar" && \
     wget -O "${SPARK_INSTALL}/jars/hadoop-aws-3.3.4.jar" https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar && \
-    wget -O "${SPARK_INSTALL}/jars/aws-java-sdk-bundle-1.12.734.jar" https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.734/aws-java-sdk-bundle-1.12.734.jar
+    wget -O "${SPARK_INSTALL}/jars/aws-java-sdk-bundle-1.12.734.jar" https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.734/aws-java-sdk-bundle-1.12.734.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/hudi/hudi-spark3.5-bundle_2.12/0.15.0/hudi-spark3.5-bundle_2.12-0.15.0.jar -O ${SPARK_INSTALL}/jars/hudi-spark-bundle.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/hudi/hudi-utilities-bundle_2.12/0.15.0/hudi-utilities-bundle_2.12-0.15.0.jar -O /opt/hudi-utilities-bundle.jar && \
+    wget https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/3.5.3/spark-avro_2.12-3.5.3.jar -O ${SPARK_INSTALL}/jars/spark-avro.jar
 
